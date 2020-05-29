@@ -9,6 +9,7 @@ Requirements
 
 Build
 ```
+./get_libs.sh
 ./build.sh
 ```
 This generates a verified typechecker in `./src/Extraction/tc.ml`

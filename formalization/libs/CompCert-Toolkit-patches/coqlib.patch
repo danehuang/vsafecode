@@ -1,0 +1,44 @@
+--- CompCert-Toolkit/Coqlib.v	2020-05-28 22:54:50.070565001 -0700
++++ libs/CompCert-Toolkit/Coqlib.v	2020-05-28 13:38:23.923843240 -0700
+@@ -408,23 +408,25 @@
+ 
+ (** Properties of [Zmin] and [Zmax] *)
+ 
++
+ Lemma Zmin_spec:
+   forall x y, Zmin x y = if zlt x y then x else y.
+ Proof.
+   intros. case (zlt x y); unfold Zlt, Zge; intros.
+-  unfold Zmin. rewrite z. auto.
++  unfold Zmin. rewrite l. auto.
+   unfold Zmin. caseEq (x ?= y); intro. 
+   apply Zcompare_Eq_eq. auto.
+   contradiction.
+   reflexivity.
+ Qed.
+ 
++
+ Lemma Zmax_spec:
+   forall x y, Zmax x y = if zlt y x then x else y.
+ Proof.
+   intros. case (zlt y x); unfold Zlt, Zge; intros.
+   unfold Zmax. rewrite <- (Zcompare_antisym y x).
+-  rewrite z. simpl. auto.
++  rewrite l. simpl. auto.
+   unfold Zmax. rewrite <- (Zcompare_antisym y x).
+   caseEq (y ?= x); intro; simpl.
+   symmetry. apply Zcompare_Eq_eq. auto.
+@@ -580,11 +582,13 @@
+ 
+ (** Properties of divisibility. *)
+ 
++(*
+ Lemma Zdivides_trans:
+   forall x y z, (x | y) -> (y | z) -> (x | z).
+ Proof.
+   intros. inv H. inv H0. exists (q0 * q). ring.
+ Qed.
++*)
+ 
+ Definition Zdivide_dec:
+   forall (p q: Z), p > 0 -> { (p|q) } + { ~(p|q) }.

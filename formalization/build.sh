@@ -1,7 +1,9 @@
 #!/bin/bash
 
 pushd libs
+
   pushd CompCert-Toolkit
+    coq_makefile *.v > Makefile
     make
   popd
 

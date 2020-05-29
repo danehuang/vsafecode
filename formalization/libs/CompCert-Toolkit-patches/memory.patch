@@ -1,0 +1,59 @@
+--- CompCert-Toolkit/Memory.v	2020-05-28 22:54:50.070565001 -0700
++++ libs/CompCert-Toolkit/Memory.v	2020-05-28 13:38:23.923843240 -0700
+@@ -1052,6 +1052,7 @@
+   apply H. 
+ Qed.
+ 
++
+ Theorem loadbytes_store_other:
+   forall b' ofs' n,
+   b' <> b
+@@ -1067,7 +1068,7 @@
+   unfold update. destruct (zeq b' b). subst b'.
+   destruct H. congruence.
+   destruct (zle n 0). 
+-  rewrite (nat_of_Z_neg _ z). auto.
++  rewrite (nat_of_Z_neg _ l). auto.
+   destruct H. omegaContradiction.
+   apply getN_setN_outside. rewrite encode_val_length. rewrite <- size_chunk_conv.
+   rewrite nat_of_Z_eq. auto. omega. 
+@@ -1077,6 +1078,7 @@
+   red; intro; elim n0; red; intros; eauto with mem.
+ Qed.
+ 
++
+ Lemma setN_property:
+   forall (P: memval -> Prop) vl p q c,
+   (forall v, In v vl -> P v) ->
+@@ -1103,6 +1105,7 @@
+   right. apply IHn. omega. 
+ Qed.
+ 
++
+ Theorem load_pointer_store:
+   forall chunk' b' ofs' v_b v_o,
+   load chunk' m2 b' ofs' = Some(Vptr v_b v_o) ->
+@@ -1151,7 +1154,7 @@
+     assert (length mvl = sz). 
+       generalize (encode_val_length chunk v). rewrite <- H1. rewrite SZ. 
+       simpl; congruence.
+-    rewrite H4. rewrite size_chunk_conv in z0. omega. 
++    rewrite H4. rewrite size_chunk_conv in g0. omega. 
+   contradiction.
+ 
+ (* 3. ofs > ofs':
+@@ -1169,11 +1172,12 @@
+     rewrite setN_outside. rewrite update_s. auto. omega.
+   assert (~memval_valid_first (c' ofs)).
+     rewrite SZ' in PSHAPE. simpl in PSHAPE. inv PSHAPE. 
+-    apply H4. apply getN_in. rewrite size_chunk_conv in z. 
+-    rewrite SZ' in z. rewrite inj_S in z. omega. 
++    apply H4. apply getN_in. rewrite size_chunk_conv in g. 
++    rewrite SZ' in g. rewrite inj_S in g. omega. 
+   contradiction.
+ Qed.
+ 
++
+ End STORE.
+ 
+ Hint Local Resolve perm_store_1 perm_store_2: mem.
